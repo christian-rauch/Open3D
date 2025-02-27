@@ -274,3 +274,21 @@ add_custom_target(install-python-package
     WORKING_DIRECTORY ${PYTHON_PACKAGE_DST_DIR}
     DEPENDS python-package
 )
+
+# install Python files an bindings to "site" location
+set(PY_SITE_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages)
+install(
+    DIRECTORY ${CMAKE_SOURCE_DIR}/python/open3d
+    DESTINATION ${PY_SITE_PATH}
+)
+install(
+    FILES "${PYTHON_COMPILED_MODULE_DIR}/_build_config.py"
+    DESTINATION ${PY_SITE_PATH}/open3d
+)
+install(
+    TARGETS pybind
+    DESTINATION ${PY_SITE_PATH}/open3d/cpu
+)
+if (BUILD_GUI)
+    file(COPY ${GUI_RESOURCE_DIR} DESTINATION ${PY_SITE_PATH}/open3d)
+endif()
